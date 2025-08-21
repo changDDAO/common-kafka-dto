@@ -1,0 +1,26 @@
+name: Publish common-kafka-dto
+
+on:
+  push:
+    branches:
+      - main  # main에 push될 때마다 실행
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew clean build publish
+        env:
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
